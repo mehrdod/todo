@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
 	"github.com/mehrdod/todo/domain"
+	"github.com/sirupsen/logrus"
+	"strings"
 )
 
 type TodoListPostgres struct {
@@ -78,4 +80,55 @@ func (tr *TodoListPostgres) GetById(userId int, listId int) (domain.TodoList, er
 	getByIdQuery := fmt.Sprintf(getByIdSql, todoListsTable, userListsTable)
 	err := tr.db.Get(&list, getByIdQuery, userId, listId)
 	return list, err
+}
+
+const deleteListSql = `
+	DELETE FROM %s tl USING %s as ul
+	WHERE tl.id = ul.list_id AND ul.user_id = $1 and ul.list_id = $2
+`
+
+func (tr *TodoListPostgres) Delete(userId int, listId int) error {
+
+	deleteListQuery := fmt.Sprintf(deleteListSql, todoListsTable, userListsTable)
+	_, err := tr.db.Exec(deleteListQuery, userId, listId)
+
+	return err
+}
+
+const updateListSql = `
+	UPDATE %s tl SET %s FROM %s ul 
+	WHERE tl.id = ul.list_id AND ul.list_id=$%d AND ul.user_id=$%d
+`
+
+func (tr *TodoListPostgres) Update(userId int, listId int, request domain.UpdateListRequest) error {
+
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if request.Title != nil {
+		setValues = append(setValues, fmt.Sprintf("title=$%d", argId))
+		args = append(args, *request.Title)
+		argId++
+	}
+
+	if request.Description != nil {
+		setValues = append(setValues, fmt.Sprintf("description=$%d", argId))
+		args = append(args, *request.Description)
+		argId++
+	}
+
+	// title = $1
+	// description = $1
+	// title = $1, description = $2
+	setQuery := strings.Join(setValues, ", ")
+
+	updateListQuery := fmt.Sprintf(updateListSql, todoListsTable, setQuery, userListsTable, argId, argId+1)
+	args = append(args, listId, userId)
+
+	logrus.Debugf("updateQuery: %s", updateListQuery)
+	logrus.Debugf("args: %s", args)
+
+	_, err := tr.db.Exec(updateListQuery, args...)
+	return err
 }

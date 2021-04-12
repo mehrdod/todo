@@ -15,6 +15,8 @@ type TodoList interface {
 	Create(userId int, list domain.TodoList) (int, error)
 	GetAll(userId int) ([]domain.TodoList, error)
 	GetById(userId int, listId int) (domain.TodoList, error)
+	Delete(userId int, listId int) error
+	Update(userId int, listId int, request domain.UpdateListRequest) error
 }
 
 type TodoItem interface {
