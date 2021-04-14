@@ -12,6 +12,17 @@ import (
 	"os"
 )
 
+// @title Training App API
+// @version 1.0
+// @description API Server for TodoList Application
+
+// @host 37.98.152.178:7002
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := initConfig(); err != nil {
