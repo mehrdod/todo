@@ -28,7 +28,7 @@ type ListsItem struct {
 }
 
 type UpdateListRequest struct {
-	Title       *string `json: "title"`
+	Title       *string `json:"title"`
 	Description *string `json:"description"`
 }
 
@@ -36,5 +36,19 @@ func (r UpdateListRequest) Validate() error {
 	if r.Title == nil && r.Description == nil {
 		return errors.New("update structure has not variables to update")
 	}
+	return nil
+}
+
+type UpdateItemRequest struct {
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Done        *bool   `json:"done"`
+}
+
+func (r UpdateItemRequest) Validate() error {
+	if r.Title == nil && r.Description == nil && r.Done == nil {
+		return errors.New("update structure has no values")
+	}
+
 	return nil
 }

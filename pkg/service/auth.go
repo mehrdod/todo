@@ -13,7 +13,7 @@ import (
 
 var (
 	salt       = os.Getenv("HASH_SALT")
-	tokenTTL   = 12 * time.Hour
+	tokenTTL   = 120 * time.Hour
 	signingKey = os.Getenv("SIGNING_KEY")
 )
 

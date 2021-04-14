@@ -19,7 +19,11 @@ type TodoList interface {
 }
 
 type TodoItem interface {
-	Create(userId int, item domain.TodoItem) (int, error)
+	Create(listId int, item domain.TodoItem) (int, error)
+	GetAll(listId int) ([]domain.TodoItem, error)
+	GetById(userId int, itemId int) (domain.TodoItem, error)
+	Delete(userId int, itemId int) error
+	Update(userId int, listId int, request domain.UpdateItemRequest) error
 }
 
 type Repository struct {
