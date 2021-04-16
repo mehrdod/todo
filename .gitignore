@@ -1,3 +1,5 @@
 # JetBrains IDE
 .idea/
 .env
+.database
+.DS_Store

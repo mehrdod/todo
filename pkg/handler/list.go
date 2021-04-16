@@ -48,7 +48,7 @@ func (h *Handler) createList(c *gin.Context) {
 // @ID get-all-lists
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} getAllListsResponse
+// @Success 200 {object} domain.TodoList
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
@@ -77,11 +77,12 @@ func (h *Handler) getAllLists(c *gin.Context) {
 // @ID get-list-by-id
 // @Accept  json
 // @Produce  json
+// @Param id path int true "list id"
 // @Success 200 {object} domain.TodoList
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /api/lists/:id [get]
+// @Router /api/lists/{id} [get]
 func (h *Handler) getListById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -111,11 +112,12 @@ func (h *Handler) getListById(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param input body domain.UpdateListRequest true "list update info"
+// @Param id path int true "list id"
 // @Success 200 {object} statusResponse
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /api/lists/:id [put]
+// @Router /api/lists/{id} [put]
 func (h *Handler) updateList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -151,11 +153,12 @@ func (h *Handler) updateList(c *gin.Context) {
 // @ID delete-list
 // @Accept  json
 // @Produce  json
+// @Param id path int true "list id"
 // @Success 200 {object} statusResponse
 // @Failure 400,404 {object} errorResponse
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
-// @Router /api/lists/:id [delete]
+// @Router /api/lists/{id} [delete]
 func (h *Handler) deleteList(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

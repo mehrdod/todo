@@ -51,7 +51,7 @@ func (tr *TodoListPostgres) Create(userId int, list domain.TodoList) (int, error
 }
 
 const getAllSql = `
-	SELECT td.title, td.description FROM %s AS td
+	SELECT td.id, td.title, td.description FROM %s AS td
 	INNER JOIN %s AS ul
 	ON ul.list_id = td.id
 	WHERE ul.user_id = $1
@@ -67,7 +67,7 @@ func (tr *TodoListPostgres) GetAll(userId int) ([]domain.TodoList, error) {
 }
 
 const getByIdSql = `
-	SELECT td.title, td.description FROM %s AS td
+	SELECT td.id, td.title, td.description FROM %s AS td
 	INNER JOIN %s AS ul
 	ON ul.list_id = td.id
 	WHERE ul.user_id = $1 AND ul.list_id = $2
