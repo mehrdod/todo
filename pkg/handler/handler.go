@@ -21,8 +21,6 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
-	router.Use(cors.Default())
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	auth := router.Group("/auth")
@@ -54,6 +52,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			items.DELETE("/:item_id", h.deleteItem)
 		}
 	}
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowAllOrigins = true
+	corsConfig.AllowCredentials = true
+	corsConfig.AddAllowMethods("OPTIONS")
+
+	router.Use(cors.New(corsConfig))
 
 	return router
 }
