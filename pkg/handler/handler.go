@@ -55,6 +55,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
 	corsConfig.AllowCredentials = true
+	corsConfig.AddAllowHeaders("Authorization")
 	corsConfig.AddAllowMethods("OPTIONS")
 
 	router.Use(cors.New(corsConfig))
